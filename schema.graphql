@@ -1,0 +1,402 @@
+﻿type UserProfile {
+  id: ID!
+  name: String!
+  email: String!
+  company_email: String
+  os: OS
+  user_location: Zone
+  trips(createdAt: ModelStringKeyConditionInput, filter: ModelTripFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTripConnection
+  rankings(valrank: ModelFloatKeyConditionInput, filter: ModelRankingFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelRankingConnection
+}
+
+type Country {
+  id: ID!
+  country_name: String!
+  regions(region_name: ModelStringKeyConditionInput, filter: ModelRegionFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelRegionConnection
+}
+
+type Region {
+  id: ID!
+  region_name: String!
+  country: Country
+  zones(zone_name: ModelStringKeyConditionInput, filter: ModelZoneFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelZoneConnection
+}
+
+type Zone {
+  id: ID!
+  zone_name: String!
+  region: Region
+  trips(filter: ModelTripFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTripConnection
+}
+
+type Trip {
+  id: ID!
+  ts_start: Int!
+  ts_finish: Int!
+  time_seconds: Int!
+  date_trip: String!
+  zone: Zone
+  user: UserProfile
+  createdAt: String!
+}
+
+enum OS {
+  ANDROID
+  IOS
+}
+
+enum RankingType {
+  WEEK
+  MONTH
+  YEAR
+}
+
+type Ranking {
+  id: ID!
+  zone: Zone!
+  ranking_type: RankingType!
+  user: UserProfile
+  valrank: Float
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelUserProfileConnection {
+  items: [UserProfile]
+  nextToken: String
+}
+
+input ModelStringFilterInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+}
+
+input ModelIDFilterInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+}
+
+input ModelIntFilterInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  contains: Int
+  notContains: Int
+  between: [Int]
+}
+
+input ModelFloatFilterInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  contains: Float
+  notContains: Float
+  between: [Float]
+}
+
+input ModelBooleanFilterInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelOSFilterInput {
+  eq: OS
+  ne: OS
+}
+
+input ModelUserProfileFilterInput {
+  id: ModelIDFilterInput
+  name: ModelStringFilterInput
+  email: ModelStringFilterInput
+  company_email: ModelStringFilterInput
+  os: ModelOSFilterInput
+  and: [ModelUserProfileFilterInput]
+  or: [ModelUserProfileFilterInput]
+  not: ModelUserProfileFilterInput
+}
+
+type Query {
+  getUserProfile(id: ID!): UserProfile
+  listUserProfiles(filter: ModelUserProfileFilterInput, limit: Int, nextToken: String): ModelUserProfileConnection
+  getCountry(id: ID!): Country
+  listCountrys(filter: ModelCountryFilterInput, limit: Int, nextToken: String): ModelCountryConnection
+  getRegion(id: ID!): Region
+  listRegions(filter: ModelRegionFilterInput, limit: Int, nextToken: String): ModelRegionConnection
+  getZone(id: ID!): Zone
+  listZones(filter: ModelZoneFilterInput, limit: Int, nextToken: String): ModelZoneConnection
+  getTrip(id: ID!): Trip
+  listTrips(filter: ModelTripFilterInput, limit: Int, nextToken: String): ModelTripConnection
+  getRanking(id: ID!): Ranking
+  listRankings(filter: ModelRankingFilterInput, limit: Int, nextToken: String): ModelRankingConnection
+}
+
+input CreateUserProfileInput {
+  id: ID
+  name: String!
+  email: String!
+  company_email: String
+  os: OS
+}
+
+input UpdateUserProfileInput {
+  id: ID!
+  name: String
+  email: String
+  company_email: String
+  os: OS
+}
+
+input DeleteUserProfileInput {
+  id: ID
+}
+
+type Mutation {
+  createUserProfile(input: CreateUserProfileInput!): UserProfile
+  updateUserProfile(input: UpdateUserProfileInput!): UserProfile
+  deleteUserProfile(input: DeleteUserProfileInput!): UserProfile
+  createCountry(input: CreateCountryInput!): Country
+  updateCountry(input: UpdateCountryInput!): Country
+  deleteCountry(input: DeleteCountryInput!): Country
+  createRegion(input: CreateRegionInput!): Region
+  updateRegion(input: UpdateRegionInput!): Region
+  deleteRegion(input: DeleteRegionInput!): Region
+  createZone(input: CreateZoneInput!): Zone
+  updateZone(input: UpdateZoneInput!): Zone
+  deleteZone(input: DeleteZoneInput!): Zone
+  createTrip(input: CreateTripInput!): Trip
+  updateTrip(input: UpdateTripInput!): Trip
+  deleteTrip(input: DeleteTripInput!): Trip
+  createRanking(input: CreateRankingInput!): Ranking
+  updateRanking(input: UpdateRankingInput!): Ranking
+  deleteRanking(input: DeleteRankingInput!): Ranking
+}
+
+type Subscription {
+  onCreateUserProfile: UserProfile @aws_subscribe(mutations: ["createUserProfile"])
+  onUpdateUserProfile: UserProfile @aws_subscribe(mutations: ["updateUserProfile"])
+  onDeleteUserProfile: UserProfile @aws_subscribe(mutations: ["deleteUserProfile"])
+  onCreateCountry: Country @aws_subscribe(mutations: ["createCountry"])
+  onUpdateCountry: Country @aws_subscribe(mutations: ["updateCountry"])
+  onDeleteCountry: Country @aws_subscribe(mutations: ["deleteCountry"])
+  onCreateRegion: Region @aws_subscribe(mutations: ["createRegion"])
+  onUpdateRegion: Region @aws_subscribe(mutations: ["updateRegion"])
+  onDeleteRegion: Region @aws_subscribe(mutations: ["deleteRegion"])
+  onCreateZone: Zone @aws_subscribe(mutations: ["createZone"])
+  onUpdateZone: Zone @aws_subscribe(mutations: ["updateZone"])
+  onDeleteZone: Zone @aws_subscribe(mutations: ["deleteZone"])
+  onCreateTrip: Trip @aws_subscribe(mutations: ["createTrip"])
+  onUpdateTrip: Trip @aws_subscribe(mutations: ["updateTrip"])
+  onDeleteTrip: Trip @aws_subscribe(mutations: ["deleteTrip"])
+  onCreateRanking: Ranking @aws_subscribe(mutations: ["createRanking"])
+  onUpdateRanking: Ranking @aws_subscribe(mutations: ["updateRanking"])
+  onDeleteRanking: Ranking @aws_subscribe(mutations: ["deleteRanking"])
+}
+
+type ModelCountryConnection {
+  items: [Country]
+  nextToken: String
+}
+
+input ModelCountryFilterInput {
+  id: ModelIDFilterInput
+  country_name: ModelStringFilterInput
+  and: [ModelCountryFilterInput]
+  or: [ModelCountryFilterInput]
+  not: ModelCountryFilterInput
+}
+
+input CreateCountryInput {
+  id: ID
+  country_name: String!
+}
+
+input UpdateCountryInput {
+  id: ID!
+  country_name: String
+}
+
+input DeleteCountryInput {
+  id: ID
+}
+
+type ModelRegionConnection {
+  items: [Region]
+  nextToken: String
+}
+
+input ModelRegionFilterInput {
+  id: ModelIDFilterInput
+  region_name: ModelStringFilterInput
+  and: [ModelRegionFilterInput]
+  or: [ModelRegionFilterInput]
+  not: ModelRegionFilterInput
+}
+
+input CreateRegionInput {
+  id: ID
+  region_name: String!
+  regionCountryId: ID
+}
+
+input UpdateRegionInput {
+  id: ID!
+  region_name: String
+  regionCountryId: ID
+}
+
+input DeleteRegionInput {
+  id: ID
+}
+
+type ModelZoneConnection {
+  items: [Zone]
+  nextToken: String
+}
+
+input ModelZoneFilterInput {
+  id: ModelIDFilterInput
+  zone_name: ModelStringFilterInput
+  and: [ModelZoneFilterInput]
+  or: [ModelZoneFilterInput]
+  not: ModelZoneFilterInput
+}
+
+input CreateZoneInput {
+  id: ID
+  zone_name: String!
+  zoneRegionId: ID
+}
+
+input UpdateZoneInput {
+  id: ID!
+  zone_name: String
+  zoneRegionId: ID
+}
+
+input DeleteZoneInput {
+  id: ID
+}
+
+type ModelTripConnection {
+  items: [Trip]
+  nextToken: String
+}
+
+input ModelTripFilterInput {
+  id: ModelIDFilterInput
+  ts_start: ModelIntFilterInput
+  ts_finish: ModelIntFilterInput
+  time_seconds: ModelIntFilterInput
+  date_trip: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  and: [ModelTripFilterInput]
+  or: [ModelTripFilterInput]
+  not: ModelTripFilterInput
+}
+
+input CreateTripInput {
+  id: ID
+  ts_start: Int!
+  ts_finish: Int!
+  time_seconds: Int!
+  date_trip: String!
+  createdAt: String!
+  tripZoneId: ID
+  tripUserId: ID
+}
+
+input UpdateTripInput {
+  id: ID!
+  ts_start: Int
+  ts_finish: Int
+  time_seconds: Int
+  date_trip: String
+  createdAt: String
+  tripZoneId: ID
+  tripUserId: ID
+}
+
+input DeleteTripInput {
+  id: ID
+}
+
+type ModelRankingConnection {
+  items: [Ranking]
+  nextToken: String
+}
+
+input ModelRankingTypeFilterInput {
+  eq: RankingType
+  ne: RankingType
+}
+
+input ModelRankingFilterInput {
+  id: ModelIDFilterInput
+  ranking_type: ModelRankingTypeFilterInput
+  valrank: ModelFloatFilterInput
+  and: [ModelRankingFilterInput]
+  or: [ModelRankingFilterInput]
+  not: ModelRankingFilterInput
+}
+
+input CreateRankingInput {
+  id: ID
+  ranking_type: RankingType!
+  valrank: Float
+  rankingUserId: ID
+}
+
+input UpdateRankingInput {
+  id: ID!
+  ranking_type: RankingType
+  valrank: Float
+  rankingUserId: ID
+}
+
+input DeleteRankingInput {
+  id: ID
+}
+
+input ModelStringKeyConditionInput {
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  between: [String]
+  beginsWith: String
+}
+
+input ModelFloatKeyConditionInput {
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+}

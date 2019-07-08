@@ -1,0 +1,421 @@
+service: sls-kpobackend
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: qa
+  region: us-east-1
+
+plugins:
+  - serverless-appsync-plugin
+
+custom:
+  appSync: # appsync plugin configuration
+    name: sls-kpobackend-qa
+    authenticationType: API_KEY # use API_KEY
+    dataSources:
+      - type: AMAZON_DYNAMODB # type of resource
+        name: UserProfileTable # name of the resource
+        config:
+          tableName: UserProfile # name of our DynamoDB table
+      - type: AMAZON_DYNAMODB
+        name: CountryTable 
+        config:
+          tableName: Country 
+      - type: AMAZON_DYNAMODB
+        name: TripTable 
+        config:
+          tableName: Trip 
+      - type: AMAZON_DYNAMODB
+        name: RegionTable 
+        config:
+          tableName: Region 
+      - type: AMAZON_DYNAMODB
+        name: ZoneTable 
+        config:
+          tableName: Zone 
+      - type: AMAZON_DYNAMODB
+        name: RankingTable 
+        config:
+          tableName: Ranking 
+    mappingTemplates:
+      - dataSource: UserProfileTable
+        type: Query
+        field: listUserProfiles # from the query in schema.graphql
+        request: "Query.listUserProfiles.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: UserProfileTable
+        type: Query
+        field: getUserProfile 
+        request: "Query.getUserProfile.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: UserProfileTable
+        type: Mutation
+        field: createUserProfile # from the mutation in schema.graphql
+        request: "Mutation.createUserProfile.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: UserProfileTable
+        type: Mutation
+        field: deleteUserProfile 
+        request: "Mutation.deleteUserProfile.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: UserProfileTable
+        type: Mutation
+        field: updateUserProfile 
+        request: "Mutation.updateUserProfile.req.vtl"
+        response: "Common.res.vtl"
+      
+      - dataSource: CountryTable
+        type: Query
+        field: listCountrys 
+        request: "Query.listCountrys.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: CountryTable
+        type: Query
+        field: getCountry 
+        request: "Query.getCountry.req.vtl"
+        response: "Common.res.vtl"      
+      - dataSource: CountryTable
+        type: Mutation
+        field: createCountry 
+        request: "Mutation.createCountry.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: CountryTable
+        type: Mutation
+        field: deleteCountry 
+        request: "Mutation.deleteCountry.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: CountryTable
+        type: Mutation
+        field: updateCountry 
+        request: "Mutation.updateCountry.req.vtl"
+        response: "Common.res.vtl"  
+
+      - dataSource: TripTable
+        type: Query
+        field: listTrips 
+        request: "Query.listTrips.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: TripTable
+        type: Query
+        field: getTrip 
+        request: "Query.getTrip.req.vtl"
+        response: "Common.res.vtl" 
+      - dataSource: TripTable
+        type: Mutation
+        field: createTrip 
+        request: "Mutation.createTrip.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: TripTable
+        type: Mutation
+        field: deleteTrip 
+        request: "Mutation.deleteTrip.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: TripTable
+        type: Mutation
+        field: updateTrip 
+        request: "Mutation.updateTrip.req.vtl"
+        response: "Common.res.vtl"
+
+      - dataSource: RegionTable
+        type: Query
+        field: listRegions 
+        request: "Query.listRegions.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: RegionTable
+        type: Query
+        field: getRegion 
+        request: "Query.getRegion.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: RegionTable
+        type: Mutation
+        field: createRegion 
+        request: "Mutation.createRegion.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: RegionTable
+        type: Mutation
+        field: deleteRegion 
+        request: "Mutation.deleteRegion.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: RegionTable
+        type: Mutation
+        field: updateRegion 
+        request: "Mutation.updateRegion.req.vtl"
+        response: "Common.res.vtl"      
+
+      - dataSource: ZoneTable
+        type: Query
+        field: listZones 
+        request: "Query.listZones.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: ZoneTable
+        type: Query
+        field: getZone 
+        request: "Query.getZone.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: ZoneTable
+        type: Mutation
+        field: createZone 
+        request: "Mutation.createZone.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: ZoneTable
+        type: Mutation
+        field: deleteZone 
+        request: "Mutation.deleteZone.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: ZoneTable
+        type: Mutation
+        field: updateZone 
+        request: "Mutation.updateZone.req.vtl"
+        response: "Common.res.vtl"
+
+      - dataSource: RankingTable
+        type: Query
+        field: listRankings 
+        request: "Query.listRankings.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: RankingTable
+        type: Query
+        field: getRanking 
+        request: "Query.getRanking.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: RankingTable
+        type: Mutation
+        field: createRanking 
+        request: "Mutation.createRanking.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: RankingTable
+        type: Mutation
+        field: deleteRanking 
+        request: "Mutation.deleteRanking.req.vtl"
+        response: "Common.res.vtl"
+      - dataSource: RankingTable
+        type: Mutation
+        field: updateRanking 
+        request: "Mutation.updateRanking.req.vtl"
+        response: "Common.res.vtl"
+
+      - dataSource: RegionTable
+        type: Country
+        field: regions
+        request: "Country.regions.req.vtl"
+        response: "Country.regions.res.vtl"
+      
+      - dataSource: UserProfileTable
+        type: Ranking
+        field: user
+        request: "Ranking.user.req.vtl"
+        response: "Ranking.user.res.vtl"
+
+      - dataSource: CountryTable
+        type: Region
+        field: country
+        request: "Region.country.req.vtl"
+        response: "Region.country.res.vtl"
+
+      - dataSource: ZoneTable
+        type: Region
+        field: zones
+        request: "Region.zones.req.vtl"
+        response: "Region.zones.res.vtl"            
+
+      - dataSource: UserProfileTable
+        type: Trip
+        field: user
+        request: "Trip.user.req.vtl"
+        response: "Trip.user.res.vtl"
+
+      - dataSource: ZoneTable
+        type: Trip
+        field: zone
+        request: "Trip.zone.req.vtl"
+        response: "Trip.zone.res.vtl"
+
+      - dataSource: RankingTable
+        type: UserProfile
+        field: rankings
+        request: "UserProfile.rankings.req.vtl"
+        response: "UserProfile.rankings.res.vtl"
+
+      - dataSource: TripTable
+        type: UserProfile
+        field: trips
+        request: "UserProfile.trips.req.vtl"
+        response: "UserProfile.trips.res.vtl"
+
+      - dataSource: RegionTable
+        type: Zone
+        field: region
+        request: "Zone.region.req.vtl"
+        response: "Zone.region.res.vtl"
+
+      - dataSource: TripTable
+        type: Zone
+        field: trips
+        request: "Zone.trips.req.vtl"
+        response: "Zone.trips.res.vtl"
+    
+functions:
+  triggerStream:
+      handler: handler.triggerStream
+      environment:
+        SM_GRAPHQL_API: https://tbnj4flpbnhxxf4vtttqd7upze.appsync-api.us-east-1.amazonaws.com/graphql
+        API_KEY: da2-r5zx7mlnqnhhzlarhdr6qtbkju
+      events:
+        - stream:
+            type: dynamodb
+            batchSize: 1
+            startingPosition: LATEST
+            arn:
+              Fn::GetAtt:
+                - Trip
+                - StreamArn
+
+resources:
+  Resources:
+    UserProfile: # name of the resource to be use later
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: "UserProfile" # name of the table
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id" # partition key
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    
+    Country:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: "Country" # name of the table
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id" # partition key
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    Trip: 
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: "Trip" # name of the table
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+          - AttributeName: "tripUserId"
+            AttributeType: "S"
+          - AttributeName: "tripZoneId"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id" # partition key
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: KEYS_ONLY #Valid Values: NEW_IMAGE | OLD_IMAGE | NEW_AND_OLD_IMAGES | KEYS_ONLY        
+        GlobalSecondaryIndexes:
+          - IndexName: "gsi-UserTrips"
+            KeySchema:
+            - AttributeName: tripUserId
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+          - IndexName: "gsi-ZoneTrips"
+            KeySchema:
+            - AttributeName: tripZoneId
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+
+    Region: 
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: "Region" # name of the table
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+          - AttributeName: "regionCountryId"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id" # partition key
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        GlobalSecondaryIndexes:
+          - IndexName: "gsi-CountryRegions"
+            KeySchema:
+            - AttributeName: regionCountryId
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+
+    Zone: 
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: "Zone" # name of the table
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+          - AttributeName: "zoneRegionId"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id" # partition key
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        GlobalSecondaryIndexes:
+          - IndexName: "gsi-RegionZones"
+            KeySchema:
+            - AttributeName: zoneRegionId
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+
+    Ranking:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: "Ranking" # name of the table
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+          - AttributeName: "rankingUserId"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id" # partition key
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        GlobalSecondaryIndexes:
+          - IndexName: "gsi-UserRankings"
+            KeySchema:
+            - AttributeName: rankingUserId
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+
+ 

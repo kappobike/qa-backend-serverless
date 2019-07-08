@@ -259,8 +259,8 @@ functions:
   triggerStream:
       handler: handler.triggerStream
       environment:
-        SM_GRAPHQL_API: https://vfnodsv2lvfyhd6pxgxrfjyx24.appsync-api.us-east-1.amazonaws.com/graphql
-        API_KEY: da2-gpih3ykm3jckpphtvsdzyvhtfi
+        SM_GRAPHQL_API: https://.../graphql
+        API_KEY: da2-xxxx
       events:
         - stream:
             type: dynamodb
